@@ -1,7 +1,8 @@
 import React from 'react';
-import { FlatList, View, Text, Image, TouchableOpacity } from 'react-native';
+import { FlatList, View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
-import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import BottomNav from './bottomnav';
 
 const meetingData = [
   {
@@ -37,10 +38,44 @@ const meetingData = [
     attendees: ['X', 'Y', 'Z'],
     moreAttendees: 3,
   },
+  {
+    id: '4',
+    title: 'ARCC Meeting 2023 - Q1\nInternal Audit - HIMIS',
+    department: 'Audit Risk and Compliance',
+    commentary: 'Q2 Discussion Goals',
+    date: 'Nov 6, 2023',
+    duration: '1 hr',
+    organizer: 'Badmin',
+    attendees: ['R', 'S', 'T'],
+    moreAttendees: 5,
+  },
+  {
+    id: '5',
+    title: 'Q3 Budget Review',
+    department: 'Finance Department',
+    commentary: 'Focus on revised forecasts',
+    date: 'Dec 12, 2023',
+    duration: '1.5 hr',
+    organizer: 'FinanceLead',
+    attendees: ['A', 'L', 'Z'],
+    moreAttendees: 2,
+  },
+  {
+    id: '6',
+    title: 'Strategy Alignment Meeting',
+    department: 'Executive Board',
+    commentary: 'Annual goals & roadmaps',
+    date: 'Jan 15, 2024',
+    duration: '2 hr',
+    organizer: 'CEO',
+    attendees: ['X', 'Y', 'Z'],
+    moreAttendees: 3,
+  }
 ];
 
-export default function AgendaScreen() {
+export default function AgendaScreen({ navigation }) {
   const renderMeetingCard = ({ item }) => (
+    <TouchableOpacity onPress={() => navigation.navigate('MeetingDetail', { meetingId: item.id })}>
     <MeetingCard>
       <MeetingTitle>{item.title}</MeetingTitle>
       <SubText>{item.department}</SubText>
@@ -87,6 +122,7 @@ export default function AgendaScreen() {
         <AgendaButtonText>Agenda 6</AgendaButtonText>
       </AgendaButton>
     </MeetingCard>
+    </TouchableOpacity>
   );
 
   return (
@@ -119,20 +155,7 @@ export default function AgendaScreen() {
         contentContainerStyle={{ paddingVertical: 20 }}
       />
 
-      <BottomNav>
-        <IconButton>
-          <Ionicons name="chatbox-outline" size={24} color="#999" />
-          <NotifBadge />
-        </IconButton>
-        <IconButton center>
-          <CenterButton>
-            <FontAwesome name="users" size={20} color="white" />
-          </CenterButton>
-        </IconButton>
-        <IconButton>
-          <Feather name="menu" size={24} color="#999" />
-        </IconButton>
-      </BottomNav>
+    <BottomNav/>
     </Container>
   );
 }
@@ -308,36 +331,5 @@ const AgendaButton = styled.TouchableOpacity`
 const AgendaButtonText = styled.Text`
   color: white;
   font-weight: bold;
-`;
-
-const BottomNav = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  padding-vertical: 10px;
-  background-color: white;
-  border-top-width: 1px;
-  border-color: #eee;
-`;
-
-const IconButton = styled.TouchableOpacity`
-  align-items: center;
-`;
-
-const CenterButton = styled.View`
-  background-color: #1434cb;
-  padding: 14px;
-  border-radius: 32px;
-  margin-top: -30px;
-`;
-
-const NotifBadge = styled.View`
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  border-radius: 5px;
-  position: absolute;
-  top: -2px;
-  right: -2px;
 `;
 
