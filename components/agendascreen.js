@@ -1,9 +1,94 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { FlatList, View, Text, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons';
 
+const meetingData = [
+  {
+    id: '1',
+    title: 'ARCC Meeting 2023 - Q1\nInternal Audit - HIMIS',
+    department: 'Audit Risk and Compliance',
+    commentary: 'Q2 Discussion Goals',
+    date: 'Nov 6, 2023',
+    duration: '1 hr',
+    organizer: 'Badmin',
+    attendees: ['R', 'S', 'T'],
+    moreAttendees: 5,
+  },
+  {
+    id: '2',
+    title: 'Q3 Budget Review',
+    department: 'Finance Department',
+    commentary: 'Focus on revised forecasts',
+    date: 'Dec 12, 2023',
+    duration: '1.5 hr',
+    organizer: 'FinanceLead',
+    attendees: ['A', 'L', 'Z'],
+    moreAttendees: 2,
+  },
+  {
+    id: '3',
+    title: 'Strategy Alignment Meeting',
+    department: 'Executive Board',
+    commentary: 'Annual goals & roadmaps',
+    date: 'Jan 15, 2024',
+    duration: '2 hr',
+    organizer: 'CEO',
+    attendees: ['X', 'Y', 'Z'],
+    moreAttendees: 3,
+  },
+];
+
 export default function AgendaScreen() {
+  const renderMeetingCard = ({ item }) => (
+    <MeetingCard>
+      <MeetingTitle>{item.title}</MeetingTitle>
+      <SubText>{item.department}</SubText>
+
+      <Label>Commentary</Label>
+      <Commentary>{item.commentary}</Commentary>
+
+      <MeetingDetails>
+        <DetailRow>
+          <Feather name="calendar" size={16} color="#f24e8e" />
+          <DetailText>{item.date}</DetailText>
+        </DetailRow>
+        <DetailRow>
+          <Feather name="clock" size={16} color="#f24e8e" />
+          <DetailText>{item.duration}</DetailText>
+        </DetailRow>
+      </MeetingDetails>
+
+      <OrganizerAttendeeRow>
+        <View>
+          <Label>Organizer</Label>
+          <OrganizerRow>
+            <AvatarCircle>
+              <AvatarText>{item.organizer[0]}</AvatarText>
+            </AvatarCircle>
+            <DetailText style={{ marginLeft: 6 }}>{item.organizer}</DetailText>
+          </OrganizerRow>
+        </View>
+
+        <View>
+          <Label>Attendees</Label>
+          <AttendeeRow>
+            {item.attendees.map((a, index) => (
+              <AttendeeCircle key={index} color={['green', 'orange', 'purple'][index % 3]}>
+                <AttendeeText>{a}</AttendeeText>
+              </AttendeeCircle>
+            ))}
+            <MoreAttendees>+{item.moreAttendees}</MoreAttendees>
+          </AttendeeRow>
+        </View>
+      </OrganizerAttendeeRow>
+
+      <AgendaButton>
+        <AgendaButtonText>Agenda 6</AgendaButtonText>
+      </AgendaButton>
+    </MeetingCard>
+  );
+
   return (
     <Container>
       <Header>
@@ -27,51 +112,12 @@ export default function AgendaScreen() {
         </TabButton>
       </TabSwitch>
 
-      <ScrollView style={{ marginTop: 10 }}>
-        <MeetingCard>
-          <MeetingTitle>ARCC Meeting 2023 – Q1{"\n"}Internal Audit - HIMIS</MeetingTitle>
-          <SubText>Audit Risk and Compliance</SubText>
-          <Label>Commentary</Label>
-          <Commentary>Q2 Discussion Goals</Commentary>
-
-          <MeetingDetails>
-            <DetailRow>
-              <Feather name="calendar" size={16} color="#f24e8e" />
-              <DetailText>Nov 6, 2023</DetailText>
-            </DetailRow>
-            <DetailRow>
-              <Feather name="clock" size={16} color="#f24e8e" />
-              <DetailText>1 hr</DetailText>
-            </DetailRow>
-          </MeetingDetails>
-
-          <OrganizerAttendeeRow>
-            <Label>Organizer</Label>
-            <OrganizerRow>
-              <AvatarCircle>
-                <AvatarText>B</AvatarText>
-              </AvatarCircle>
-              <DetailText style={{ marginLeft: 6 }}>Badmin</DetailText>
-            </OrganizerRow>
-
-            <Label>Attendees</Label>
-            <AttendeeRow>
-              {['green', 'orange', 'purple'].map((color, index) => (
-                <AttendeeCircle key={index} color={color}>
-                  <AttendeeText>{String.fromCharCode(82 + index)}</AttendeeText>
-                </AttendeeCircle>
-              ))}
-              <MoreAttendees>+5</MoreAttendees>
-            </AttendeeRow>
-          </OrganizerAttendeeRow>
-
-          <AgendaButton>
-            <AgendaButtonText>Agenda 6</AgendaButtonText>
-          </AgendaButton>
-        </MeetingCard>
-
-        {/* Duplicate MeetingCard here for more items if needed */}
-      </ScrollView>
+      <FlatList
+        data={meetingData}
+        renderItem={renderMeetingCard}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingVertical: 20 }}
+      />
 
       <BottomNav>
         <IconButton>
@@ -90,6 +136,7 @@ export default function AgendaScreen() {
     </Container>
   );
 }
+
 
 // --- Styled Components ---
 
